@@ -1,9 +1,10 @@
 import argparse
 from typing import Optional, Dict, Tuple
 
-from bullcrypt import types
-from bullcrypt.algorithm import Algorithm
 from cryptography.fernet import Fernet as _Fernet
+
+from .. import types
+from ..algorithm import Algorithm
 
 
 class Fernet(Algorithm):
@@ -15,19 +16,26 @@ class Fernet(Algorithm):
     # noinspection PyUnusedLocal
     @classmethod
     def register_args(cls, algorithm_name: str, parser):
-        group = parser.add_argument_group("Fernet")
+        group = parser.add_argument_group(f"Fernet ({algorithm_name})")
         group.add_argument(
-            "--key",
+            f"--{algorithm_name}.key",
             dest=f"{algorithm_name}.key",
-            required=True,
             help="A 32-byte key encoded as Base64URL",
         )
 
     # noinspection PyUnusedLocal
     @classmethod
-    def extract_args(cls, algorithm_name: str, args: argparse.Namespace) -> Optional[Dict]:
+    def extract_args(
+        cls, algorithm_name: str, args: argparse.Namespace
+    ) -> Optional[Dict]:
+        key: Optional[str] = getattr(args, f"{algorithm_name}.key")
+        if not key:
+            raise ValueError(
+                "A Fernet key is required and must be 32 url-safe base64-encoded bytes."
+            )
+
         return {
-            "key": getattr(args, f"{algorithm_name}.key"),
+            "key": key,
         }
 
 

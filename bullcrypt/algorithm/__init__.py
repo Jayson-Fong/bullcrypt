@@ -2,7 +2,7 @@ import argparse
 import pathlib
 from typing import Optional, Dict, Tuple
 
-from bullcrypt import utils, types
+from .. import utils, types
 
 
 class Algorithm:
@@ -12,7 +12,7 @@ class Algorithm:
             file_path,
             mode=options.mode,
             plaintext_encoding=options.plaintext_encoding,
-            encoding=options.encoding
+            encoding=options.encoding,
         )
 
     @classmethod
@@ -23,13 +23,13 @@ class Algorithm:
     @classmethod
     def register_args(cls, algorithm_name: str, parser):
         del algorithm_name, parser
-        pass
 
     # noinspection PyUnusedLocal
     @classmethod
-    def extract_args(cls, algorithm_name: str, args: argparse.Namespace) -> Optional[Dict]:
+    def extract_args(
+        cls, algorithm_name: str, args: argparse.Namespace
+    ) -> Optional[Dict]:
         del algorithm_name, args
-        return None
 
 
 __all__: Tuple[str, ...] = ("Algorithm",)

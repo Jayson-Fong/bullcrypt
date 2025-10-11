@@ -3,7 +3,7 @@ import pathlib
 from importlib.metadata import entry_points
 from typing import Any, Sequence, Tuple, Dict, Callable, TypeVar, Union, Optional
 
-from bullcrypt import types
+from . import types
 
 
 def get_algorithms():
@@ -14,7 +14,9 @@ T = TypeVar("T")
 U = TypeVar("U")
 
 
-def get_truthy_attribute(obj: Any, options: Sequence[T], fallback: U = None) -> Union[T, U]:
+def get_truthy_attribute(
+    obj: Any, options: Sequence[T], fallback: U = None
+) -> Union[T, U]:
     for option in options:
         if getattr(obj, option, False):
             return option
@@ -49,17 +51,17 @@ def extract_content(
     encoding: str,
 ):
     if mode == "raw":
-        with open(file_path, "rb") as file:
+        with open(file_path, "rb", encoding=encoding) as file:
             yield file.read()
     elif mode == "chunked":
-        with open(file_path, "r") as file:
+        with open(file_path, "r", encoding=encoding) as file:
             yield decode_content(
                 "".join(file.read().splitlines()),
                 plaintext_encoding,
                 encoding,
             )
     elif mode == "line":
-        with open(file_path, "r") as file:
+        with open(file_path, "r", encoding=encoding) as file:
             for line in file:
                 line = line.strip()
                 if line:

@@ -30,5 +30,8 @@ classifiers = [
 Homepage = "https://github.com/Jayson-Fong/bullcrypt"
 Issues = "https://github.com/Jayson-Fong/bullcrypt/issues"
 
+[project.scripts]
+bullcrypt = "bullcrypt.main:main"
+
 [project.entry-points.'bullcrypt.algorithm']
-fermet = "bullcrypt.algorithm.fernet:Fernet"
+fernet = "bullcrypt.algorithm.fernet:Fernet"
