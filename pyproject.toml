@@ -6,6 +6,9 @@ build-backend = "hatchling.build"
 name = "bullcrypt"
 version = "0.0.1"
 requires-python = ">=3.11"
+dependencies = [
+    "cryptography>=2.2",
+]
 authors = [
     {name = "Jayson Fong", email = "jayson.fong@gatech.edu"}
 ]
