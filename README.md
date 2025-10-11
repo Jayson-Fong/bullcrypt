@@ -116,3 +116,9 @@ bullcrypt --line --plain --fernet.key "__v9Onuy1wgYTueMJ5BhHc4UnSYYuNuQUkUyLZtA0
 ```
 
 Once again, `--plain` was added because each line is as provided by the Fernet algorithm.
+
+# Backlog
+
+Some expected future features:
+- Key brute-forcing
+- Multiprocessing
