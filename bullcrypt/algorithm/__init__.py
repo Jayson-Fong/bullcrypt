@@ -1,5 +1,7 @@
 import argparse
+import functools
 import pathlib
+from abc import abstractmethod
 from typing import Optional, Dict, Tuple
 
 from .. import utils, types
@@ -16,8 +18,13 @@ class Algorithm:
         )
 
     @classmethod
+    @abstractmethod
+    def _decryption_group(cls, payload: bytes, options: types.Options):
+        yield from ()
+
+    @classmethod
     def decrypt(cls, payload: bytes, options: types.Options):
-        pass
+        return functools.partial(cls._decryption_group, payload, options)
 
     # noinspection PyUnusedLocal
     @classmethod

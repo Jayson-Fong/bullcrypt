@@ -1,9 +1,13 @@
 import base64
+import logging
 import pathlib
 from importlib.metadata import entry_points
 from typing import Any, Sequence, Tuple, Dict, Callable, TypeVar, Union, Optional
 
 from . import types
+
+
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 def get_algorithms():
@@ -65,7 +69,11 @@ def extract_content(
             for line in file:
                 line = line.strip()
                 if line:
-                    yield decode_content(line, plaintext_encoding, encoding)
+                    # noinspection PyBroadException
+                    try:
+                        yield decode_content(line, plaintext_encoding, encoding)
+                    except Exception:
+                        logger.exception("Failed to decode line: %s", line)
 
 
 __all__: Tuple[str, ...] = ("get_algorithms", "get_truthy_attribute")
