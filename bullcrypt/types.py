@@ -1,4 +1,14 @@
-from typing import NamedTuple, Literal, Union, TypeAlias, Optional, Dict, Tuple
+from typing import (
+    NamedTuple,
+    Literal,
+    Union,
+    TypeAlias,
+    Optional,
+    Dict,
+    Tuple,
+    Callable,
+    Generator,
+)
 
 # fmt: off
 FileParsingMode: TypeAlias = Union[
@@ -8,6 +18,10 @@ FileParsingMode: TypeAlias = Union[
 PlaintextEncoding: TypeAlias = Union[
     Literal["base64"], Literal["base64url"], Literal["base32"],
     Literal["base32hex"], Literal["base16"], Literal["plain"]
+]
+
+DecipherProcessingGroup: TypeAlias = Callable[
+    [], Generator[Callable[[], bytes], None, None]
 ]
 # fmt: on
 
@@ -20,4 +34,9 @@ class Options(NamedTuple):
     algorithm_options: Optional[Dict] = None
 
 
-__all__: Tuple[str, ...] = ("Options", "PlaintextEncoding", "FileParsingMode")
+__all__: Tuple[str, ...] = (
+    "DecipherProcessingGroup",
+    "Options",
+    "PlaintextEncoding",
+    "FileParsingMode",
+)
