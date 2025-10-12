@@ -2,20 +2,33 @@ import base64
 import logging
 import pathlib
 from importlib.metadata import entry_points
-from typing import Any, Sequence, Tuple, Dict, Callable, TypeVar, Union, Optional
+from typing import (
+    Any,
+    Sequence,
+    Tuple,
+    Dict,
+    Callable,
+    TypeVar,
+    Union,
+    Optional,
+    TYPE_CHECKING, Generator,
+)
 
-from . import types
+if TYPE_CHECKING:
+    from . import types
 
+    # noinspection PyProtectedMember
+    from importlib.metadata import EntryPoints
 
 logger: logging.Logger = logging.getLogger(__name__)
 
 
-def get_algorithms():
+def get_algorithms() -> "EntryPoints":
     return entry_points(group="bullcrypt.algorithm")
 
 
-T = TypeVar("T")
-U = TypeVar("U")
+T: TypeVar = TypeVar("T")
+U: TypeVar = TypeVar("U")
 
 
 def get_truthy_attribute(
@@ -39,7 +52,7 @@ DECODERS: Dict[str, Callable[[str], bytes]] = {
 
 def decode_content(
     content: str,
-    plaintext_encoding: Optional[types.PlaintextEncoding],
+    plaintext_encoding: Optional["types.PlaintextEncoding"],
     encoding: str,
 ) -> bytes:
     if plaintext_encoding is None or plaintext_encoding == "plain":
@@ -50,10 +63,10 @@ def decode_content(
 
 def extract_content(
     file_path: pathlib.Path,
-    mode: types.FileParsingMode,
-    plaintext_encoding: Optional[types.PlaintextEncoding],
+    mode: "types.FileParsingMode",
+    plaintext_encoding: Optional["types.PlaintextEncoding"],
     encoding: str,
-):
+) -> Generator[bytes, None, None]:
     if mode == "raw":
         with open(file_path, "rb", encoding=encoding) as file:
             yield file.read()

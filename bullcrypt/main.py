@@ -2,10 +2,10 @@ import logging
 import pathlib
 from typing import TYPE_CHECKING, Type, Tuple
 
-from . import cli, types
+from . import cli
 
 if TYPE_CHECKING:
-    from . import algorithm
+    from . import algorithm, types
 
 
 logger: logging.Logger = logging.getLogger(__name__)
@@ -14,14 +14,14 @@ logger: logging.Logger = logging.getLogger(__name__)
 def _decrypt_file(
     handler: Type["algorithm.Algorithm"],
     file_path: pathlib.Path,
-    options: types.Options,
+    options: "types.Options",
 ):
     for payload in handler.extract_content(file_path, options):
         yield file_path, handler.decrypt(payload, options)
 
 
 def _process_file(
-    handler: Type["algorithm.Algorithm"], file_path: str, options: types.Options
+    handler: Type["algorithm.Algorithm"], file_path: str, options: "types.Options"
 ):
     normalized_path: pathlib.Path = pathlib.Path(file_path)
     if normalized_path.is_file():
@@ -36,7 +36,9 @@ def _process_file(
                 logger.exception("Failed to process file: %s", entry_path)
 
 
-def _default_result_handler(result: Tuple[pathlib.Path, types.DecipherProcessingGroup]):
+def _default_result_handler(
+    result: Tuple[pathlib.Path, "types.DecipherProcessingGroup"],
+) -> None:
     file_path, result_generator = result
     for result_entry in result_generator():
         # noinspection PyBroadException
@@ -48,7 +50,7 @@ def _default_result_handler(result: Tuple[pathlib.Path, types.DecipherProcessing
             logger.info("Failed deciphering %s", file_path, exc_info=True)
 
 
-def main():
+def main() -> None:
     handler, files, options = cli.parse()
 
     for file in files:

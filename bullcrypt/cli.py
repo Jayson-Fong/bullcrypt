@@ -1,17 +1,19 @@
 import argparse
-from typing import Tuple, Type, TYPE_CHECKING
+from typing import Tuple, Type, TYPE_CHECKING, Sequence
 
-from . import utils, types, algorithm
+from . import utils, types
 
 
 if TYPE_CHECKING:
     # noinspection PyProtectedMember
     from importlib.metadata import EntryPoints
 
+    from . import algorithm
+
 ALGORITHMS: "EntryPoints" = utils.get_algorithms()
 
 
-def _is_plain_parsing():
+def _is_plain_parsing() -> bool:
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
         exit_on_error=False, add_help=False
     )
@@ -24,7 +26,7 @@ def _is_plain_parsing():
 
 
 def _add_parsing_strategy_group(parser: argparse.ArgumentParser) -> None:
-    group: argparse._ArgumentGroup = parser.add_argument_group(
+    group = parser.add_argument_group(
         "File Parsing Strategy",
         description="Method to extract ciphertext from the provided files.",
     )
@@ -50,7 +52,7 @@ def _add_parsing_strategy_group(parser: argparse.ArgumentParser) -> None:
 
 
 def _add_plain_group(parser: argparse.ArgumentParser) -> None:
-    group: argparse._ArgumentGroup = parser.add_argument_group(
+    group = parser.add_argument_group(
         "Plaintext Encoding",
         description="Encoding used to decode plaintext input. "
         "Ignored when using raw bytes as ciphertext "
@@ -96,7 +98,7 @@ def _add_plain_group(parser: argparse.ArgumentParser) -> None:
 
 
 def _add_algorithm_group(parser: argparse.ArgumentParser) -> None:
-    algorithms = utils.get_algorithms()
+    algorithms: EntryPoints = utils.get_algorithms()
     parser.add_argument(
         "algorithm", choices=[e.name for e in algorithms], help="The algorithm to use."
     )
@@ -126,16 +128,16 @@ def _main_parser():
     return parser
 
 
-def parse():
-    parser = _main_parser()
-    args = parser.parse_args()
+def parse() -> Tuple[Type["algorithm.Algorithm"], Sequence[str], types.Options]:
+    parser: argparse.ArgumentParser = _main_parser()
+    args: argparse.Namespace = parser.parse_args()
 
     # noinspection PyTypeChecker
-    mode: types.FileParsingMode = utils.get_truthy_attribute(
+    mode: "types.FileParsingMode" = utils.get_truthy_attribute(
         args, ("raw", "line", "chunked"), fallback="raw"
     )
 
-    plaintext_encoding = utils.get_truthy_attribute(
+    plaintext_encoding: "types.PlaintextEncoding" = utils.get_truthy_attribute(
         args, ("base64", "base64url", "base32", "base32hex", "base16", "plain")
     )
 

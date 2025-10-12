@@ -2,14 +2,18 @@ import argparse
 import functools
 import pathlib
 from abc import abstractmethod
-from typing import Optional, Dict, Tuple
+from typing import Optional, Dict, Tuple, TYPE_CHECKING
 
-from .. import utils, types
+from .. import utils
+
+
+if TYPE_CHECKING:
+    from .. import types
 
 
 class Algorithm:
     @classmethod
-    def extract_content(cls, file_path: pathlib.Path, options: types.Options):
+    def extract_content(cls, file_path: pathlib.Path, options: "types.Options"):
         yield from utils.extract_content(
             file_path,
             mode=options.mode,
@@ -19,11 +23,11 @@ class Algorithm:
 
     @classmethod
     @abstractmethod
-    def _decryption_group(cls, payload: bytes, options: types.Options):
+    def _decryption_group(cls, payload: bytes, options: "types.Options"):
         yield from ()
 
     @classmethod
-    def decrypt(cls, payload: bytes, options: types.Options):
+    def decrypt(cls, payload: bytes, options: "types.Options"):
         return functools.partial(cls._decryption_group, payload, options)
 
     # noinspection PyUnusedLocal

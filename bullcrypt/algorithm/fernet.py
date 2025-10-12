@@ -1,27 +1,30 @@
 import argparse
 import functools
-from typing import Optional, Dict, Tuple
+from typing import Optional, Dict, Tuple, TYPE_CHECKING, Callable, Generator
 
 from cryptography.fernet import Fernet as _Fernet
 
-from .. import types
 from ..algorithm import Algorithm
+
+
+if TYPE_CHECKING:
+    from .. import types
 
 
 class Fernet(Algorithm):
     @classmethod
-    def _decrypt_one(cls, payload: bytes, key: str, options: types.Options):
+    def _decrypt_one(cls, payload: bytes, key: str, options: "types.Options") -> bytes:
         return _Fernet(key.encode(options.encoding)).decrypt(payload)
 
     @classmethod
-    def _decryption_group(cls, payload: bytes, options: types.Options):
+    def _decryption_group(cls, payload: bytes, options: "types.Options") -> Generator[Callable[[], bytes], None, None]:
         for key in options.algorithm_options["key"]:
             yield functools.partial(
                 cls._decrypt_one, payload=payload, key=key, options=options
             )
 
     @classmethod
-    def register_args(cls, algorithm_name: str, parser):
+    def register_args(cls, algorithm_name: str, parser) -> None:
         group = parser.add_argument_group(f"Fernet ({algorithm_name})")
         group.add_argument(
             f"--{algorithm_name}.key",
