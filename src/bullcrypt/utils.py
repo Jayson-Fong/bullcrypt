@@ -11,7 +11,8 @@ from typing import (
     TypeVar,
     Union,
     Optional,
-    TYPE_CHECKING, Generator,
+    TYPE_CHECKING,
+    Generator,
 )
 
 if TYPE_CHECKING:
@@ -27,13 +28,11 @@ def get_algorithms() -> "EntryPoints":
     return entry_points(group="bullcrypt.algorithm")
 
 
-T: TypeVar = TypeVar("T")
-U: TypeVar = TypeVar("U")
+T = TypeVar("T", bound=str)
+U = TypeVar("U", bound=str)
 
 
-def get_truthy_attribute(
-    obj: Any, options: Sequence[T], fallback: U = None
-) -> Union[T, U]:
+def get_truthy_attribute(obj: Any, options: Sequence[T], fallback: U) -> Union[T, U]:
     for option in options:
         if getattr(obj, option, False):
             return option

@@ -4,10 +4,10 @@ from typing import (
     Union,
     TypeAlias,
     Optional,
-    Dict,
     Tuple,
     Callable,
     Generator,
+    Any,
 )
 
 # fmt: off
@@ -31,7 +31,7 @@ class Options(NamedTuple):
     plaintext_encoding: Optional[PlaintextEncoding]
     encoding: str = "utf-8"
     recursive: bool = False
-    algorithm_options: Optional[Dict] = None
+    algorithm_options: Optional[Any] = None
 
 
 __all__: Tuple[str, ...] = (

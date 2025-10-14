@@ -33,6 +33,49 @@ classifiers = [
 Homepage = "https://github.com/Jayson-Fong/bullcrypt"
 Issues = "https://github.com/Jayson-Fong/bullcrypt/issues"
 
+[dependency-groups]
+test = [
+    "pytest",
+    "pytest-cov",
+]
+
+dev = [
+    "black",
+    "ruff",
+    "mypy",
+    "pytest",
+    "pytest-cov"
+]
+
+[tool.hatch.build]
+packages = ["src/bullcrypt"]
+exclude = ["tests"]
+
+[tool.pytest.ini_options]
+addopts = "-v --cov=bullcrypt --cov-report=term-missing"
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.mypy]
+warn_unused_configs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+strict_optional = true
+mypy_path = ["src", "tests"]
+
+[tool.ruff]
+src = ["src"]
+fix = true
+show-fixes = true
+output-format = "full"
+
+[tool.coverage.run]
+branch = true
+source = ["bullcrypt", "tests"]
+
+[tool.coverage.paths]
+source = ["src", "*/site-packages"]
+
 [project.scripts]
 bullcrypt = "bullcrypt.main:main"
 

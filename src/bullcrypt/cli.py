@@ -108,7 +108,7 @@ def _add_algorithm_group(parser: argparse.ArgumentParser) -> None:
         handler.register_args(alg.name, parser)
 
 
-def _main_parser():
+def _main_parser() -> argparse.ArgumentParser:
     parser: argparse.ArgumentParser = argparse.ArgumentParser()
     parser.add_argument("--encoding", default="utf-8", help="The encoding to use.")
     parser.add_argument(
@@ -137,8 +137,11 @@ def parse() -> Tuple[Type["algorithm.Algorithm"], Sequence[str], types.Options]:
         args, ("raw", "line", "chunked"), fallback="raw"
     )
 
+    # noinspection PyTypeChecker
     plaintext_encoding: "types.PlaintextEncoding" = utils.get_truthy_attribute(
-        args, ("base64", "base64url", "base32", "base32hex", "base16", "plain")
+        args,
+        ("base64", "base64url", "base32", "base32hex", "base16", "plain"),
+        fallback="plain",
     )
 
     algorithm_handler: Type["algorithm.Algorithm"] = ALGORITHMS[args.algorithm].load()

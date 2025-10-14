@@ -17,14 +17,21 @@ class Fernet(Algorithm):
         return _Fernet(key.encode(options.encoding)).decrypt(payload)
 
     @classmethod
-    def _decryption_group(cls, payload: bytes, options: "types.Options") -> Generator[Callable[[], bytes], None, None]:
+    def _decryption_group(
+        cls, payload: bytes, options: "types.Options"
+    ) -> Generator[Callable[[], bytes], None, None]:
+        if not isinstance(options.algorithm_options, dict):
+            raise ValueError("Algorithm options expected to be a dict")
+
         for key in options.algorithm_options["key"]:
             yield functools.partial(
                 cls._decrypt_one, payload=payload, key=key, options=options
             )
 
     @classmethod
-    def register_args(cls, algorithm_name: str, parser) -> None:
+    def register_args(
+        cls, algorithm_name: str, parser: argparse.ArgumentParser
+    ) -> None:
         group = parser.add_argument_group(f"Fernet ({algorithm_name})")
         group.add_argument(
             f"--{algorithm_name}.key",

@@ -1,6 +1,6 @@
 import logging
 import pathlib
-from typing import TYPE_CHECKING, Type, Tuple
+from typing import TYPE_CHECKING, Type, Tuple, Callable, Generator
 
 from . import cli
 
@@ -15,14 +15,20 @@ def _decrypt_file(
     handler: Type["algorithm.Algorithm"],
     file_path: pathlib.Path,
     options: "types.Options",
-):
+) -> Generator[
+    Tuple[pathlib.Path, Callable[[], Generator[Callable[[], bytes], None, None]]],
+    None,
+    None,
+]:
     for payload in handler.extract_content(file_path, options):
         yield file_path, handler.decrypt(payload, options)
 
 
 def _process_file(
     handler: Type["algorithm.Algorithm"], file_path: str, options: "types.Options"
-):
+) -> Generator[
+    Tuple[pathlib.Path, Callable[[], Generator[Callable[[], bytes], None, None]]]
+]:
     normalized_path: pathlib.Path = pathlib.Path(file_path)
     if normalized_path.is_file():
         yield from _decrypt_file(handler, normalized_path, options)
