@@ -1,6 +1,6 @@
 import logging
 import pathlib
-from typing import TYPE_CHECKING, Type, Tuple, Callable, Generator
+from typing import TYPE_CHECKING, Type, Tuple, Callable, Generator, Optional, Sequence
 
 from . import cli
 
@@ -58,8 +58,8 @@ def _default_result_handler(
             logger.info("Failed deciphering %s", file_path, exc_info=True)
 
 
-def main() -> None:
-    handler, files, options = cli.parse()
+def main(args: Optional[Sequence[str]] = None) -> None:
+    handler, files, options = cli.parse(args)
 
     for file in files:
         # pylint: disable=broad-exception-caught

@@ -71,7 +71,7 @@ def extract_content(
     encoding: str,
 ) -> Generator[bytes, None, None]:
     if mode == "raw":
-        with open(file_path, "rb", encoding=encoding) as file:
+        with open(file_path, "rb") as file:
             yield file.read()
     elif mode == "chunked":
         with open(file_path, "r", encoding=encoding) as file:

@@ -1,5 +1,5 @@
 import argparse
-from typing import Tuple, Type, TYPE_CHECKING, Sequence
+from typing import Tuple, Type, TYPE_CHECKING, Sequence, Optional
 
 from . import utils, types
 
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 ALGORITHMS: "EntryPoints" = utils.get_algorithms()
 
 
-def _is_plain_parsing() -> bool:
+def _is_plain_parsing(args: Optional[Sequence[str]] = None) -> bool:
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
         exit_on_error=False, add_help=False
     )
@@ -21,7 +21,7 @@ def _is_plain_parsing() -> bool:
     parser.add_argument("--line", action="store_true", dest="plain", default=False)
     parser.add_argument("--chunked", action="store_true", dest="plain", default=False)
 
-    args, _unknown_args = parser.parse_known_args()
+    args, _unknown_args = parser.parse_known_args(args)
     return args.plain
 
 
@@ -51,14 +51,18 @@ def _add_parsing_strategy_group(parser: argparse.ArgumentParser) -> None:
     )
 
 
-def _add_plain_group(parser: argparse.ArgumentParser) -> None:
+def _add_plain_group(
+    parser: argparse.ArgumentParser, args: Optional[Sequence[str]] = None
+) -> None:
     group = parser.add_argument_group(
         "Plaintext Encoding",
         description="Encoding used to decode plaintext input. "
         "Ignored when using raw bytes as ciphertext "
         "and required when using plaintext.",
     )
-    exclusion_group = group.add_mutually_exclusive_group(required=_is_plain_parsing())
+    exclusion_group = group.add_mutually_exclusive_group(
+        required=_is_plain_parsing(args)
+    )
     exclusion_group.add_argument(
         "--base64",
         action="store_true",
@@ -108,7 +112,7 @@ def _add_algorithm_group(parser: argparse.ArgumentParser) -> None:
         handler.register_args(alg.name, parser)
 
 
-def _main_parser() -> argparse.ArgumentParser:
+def _main_parser(args: Optional[Sequence[str]] = None) -> argparse.ArgumentParser:
     parser: argparse.ArgumentParser = argparse.ArgumentParser()
     parser.add_argument("--encoding", default="utf-8", help="The encoding to use.")
     parser.add_argument(
@@ -120,7 +124,7 @@ def _main_parser() -> argparse.ArgumentParser:
     )
 
     _add_parsing_strategy_group(parser)
-    _add_plain_group(parser)
+    _add_plain_group(parser, args)
     _add_algorithm_group(parser)
 
     parser.add_argument("files", nargs="+", help="Files to parse.")
@@ -128,9 +132,11 @@ def _main_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def parse() -> Tuple[Type["algorithm.Algorithm"], Sequence[str], types.Options]:
-    parser: argparse.ArgumentParser = _main_parser()
-    args: argparse.Namespace = parser.parse_args()
+def parse(
+    args: Optional[Sequence[str]] = None,
+) -> Tuple[Type["algorithm.Algorithm"], Sequence[str], types.Options]:
+    parser: argparse.ArgumentParser = _main_parser(args)
+    args: argparse.Namespace = parser.parse_args(args)
 
     # noinspection PyTypeChecker
     mode: "types.FileParsingMode" = utils.get_truthy_attribute(
