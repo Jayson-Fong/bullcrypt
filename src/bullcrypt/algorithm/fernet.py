@@ -1,6 +1,6 @@
 import argparse
 import functools
-from typing import Optional, Dict, Tuple, TYPE_CHECKING, Callable, Generator
+from typing import Optional, Dict, Tuple, TYPE_CHECKING, Callable, Generator, List
 
 from cryptography.fernet import Fernet as _Fernet
 
@@ -45,11 +45,15 @@ class Fernet(Algorithm):
     def extract_args(
         cls, algorithm_name: str, args: argparse.Namespace
     ) -> Optional[Dict]:
-        key: Optional[str] = getattr(args, f"{algorithm_name}.key")
+        key: Optional[List[str]] = getattr(args, f"{algorithm_name}.key")
         if not key:
             raise ValueError(
                 "A Fernet key is required and must be 32 url-safe base64-encoded bytes."
             )
+
+        key = [k for k in key if k]
+        if not key:
+            raise ValueError("A Fernet key is required and must be 32 url-safe base64-encoded bytes.")
 
         return {
             "key": key,
