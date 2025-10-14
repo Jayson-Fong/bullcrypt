@@ -1,3 +1,8 @@
+"""
+Processes command-line inputs to trigger decryption.
+"""
+
+
 import argparse
 from typing import Tuple, Type, TYPE_CHECKING, Sequence, Optional
 
@@ -135,6 +140,13 @@ def _main_parser(args: Optional[Sequence[str]] = None) -> argparse.ArgumentParse
 def parse(
     cli_args: Optional[Sequence[str]] = None,
 ) -> Tuple[Type["algorithm.Algorithm"], Sequence[str], types.Options]:
+    """
+    Parses CLI arguments and creates a `types.Options` instance.
+
+    :param cli_args: Command-line arguments, passed to the parser.
+    :return: `types.Options` instance.
+    """
+
     parser: argparse.ArgumentParser = _main_parser(cli_args)
     args: argparse.Namespace = parser.parse_args(cli_args)
 

@@ -1,3 +1,7 @@
+"""
+Types used across the package.
+"""
+
 from typing import (
     NamedTuple,
     Literal,
@@ -28,6 +32,8 @@ DecipherProcessingGroup: TypeAlias = Callable[
 
 
 class Options(NamedTuple):
+    """Options specifying how to decrypt files"""
+
     mode: FileParsingMode
     plaintext_encoding: Optional[PlaintextEncoding]
     encoding: str = "utf-8"

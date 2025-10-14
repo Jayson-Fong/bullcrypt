@@ -1,3 +1,8 @@
+"""
+Wrapper around `cryptography` to decrypt Fernet ciphertexts.
+"""
+
+
 import argparse
 import functools
 from typing import Optional, Dict, Tuple, TYPE_CHECKING, Callable, Generator, List
@@ -12,6 +17,8 @@ if TYPE_CHECKING:
 
 
 class Fernet(Algorithm):
+    """Plugin for decrypting using the Fernet encryption algorithm."""
+
     @classmethod
     def _decrypt_one(cls, payload: bytes, key: str, options: "types.Options") -> bytes:
         return _Fernet(key.encode(options.encoding)).decrypt(payload)
@@ -53,7 +60,9 @@ class Fernet(Algorithm):
 
         key = [k for k in key if k]
         if not key:
-            raise ValueError("A Fernet key is required and must be 32 url-safe base64-encoded bytes.")
+            raise ValueError(
+                "A Fernet key is required and must be 32 url-safe base64-encoded bytes."
+            )
 
         return {
             "key": key,
