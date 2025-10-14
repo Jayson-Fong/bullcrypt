@@ -27,7 +27,9 @@ def _decrypt_file(
 def _process_file(
     handler: Type["algorithm.Algorithm"], file_path: str, options: "types.Options"
 ) -> Generator[
-    Tuple[pathlib.Path, Callable[[], Generator[Callable[[], bytes], None, None]]]
+    Tuple[pathlib.Path, Callable[[], Generator[Callable[[], bytes], None, None]]],
+    None,
+    None,
 ]:
     normalized_path: pathlib.Path = pathlib.Path(file_path)
     if normalized_path.is_file():

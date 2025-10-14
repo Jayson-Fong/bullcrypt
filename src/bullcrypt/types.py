@@ -2,13 +2,14 @@ from typing import (
     NamedTuple,
     Literal,
     Union,
-    TypeAlias,
     Optional,
     Tuple,
     Callable,
     Generator,
     Any,
 )
+
+from typing import TypeAlias
 
 # fmt: off
 FileParsingMode: TypeAlias = Union[

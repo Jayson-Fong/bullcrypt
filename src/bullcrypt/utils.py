@@ -18,8 +18,12 @@ from typing import (
 if TYPE_CHECKING:
     from . import types
 
-    # noinspection PyProtectedMember
-    from importlib.metadata import EntryPoints
+    try:
+        # noinspection PyProtectedMember
+        from importlib.metadata import EntryPoints  # type: ignore[no-redef]
+    except ImportError:
+        # noinspection PyProtectedMember,PyUnresolvedReferences
+        from importlib_metadata import EntryPoints  # type: ignore[no-redef]
 
 logger: logging.Logger = logging.getLogger(__name__)
 
