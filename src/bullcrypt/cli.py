@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 ALGORITHMS: "EntryPoints" = utils.get_algorithms()
 
 
-def _is_plain_parsing(args: Optional[Sequence[str]] = None) -> bool:
+def _is_plain_parsing(cli_args: Optional[Sequence[str]] = None) -> bool:
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
         exit_on_error=False, add_help=False
     )
@@ -21,7 +21,7 @@ def _is_plain_parsing(args: Optional[Sequence[str]] = None) -> bool:
     parser.add_argument("--line", action="store_true", dest="plain", default=False)
     parser.add_argument("--chunked", action="store_true", dest="plain", default=False)
 
-    args, _unknown_args = parser.parse_known_args(args)
+    args, _unknown_args = parser.parse_known_args(cli_args)
     return args.plain
 
 
@@ -133,10 +133,10 @@ def _main_parser(args: Optional[Sequence[str]] = None) -> argparse.ArgumentParse
 
 
 def parse(
-    args: Optional[Sequence[str]] = None,
+    cli_args: Optional[Sequence[str]] = None,
 ) -> Tuple[Type["algorithm.Algorithm"], Sequence[str], types.Options]:
-    parser: argparse.ArgumentParser = _main_parser(args)
-    args: argparse.Namespace = parser.parse_args(args)
+    parser: argparse.ArgumentParser = _main_parser(cli_args)
+    args: argparse.Namespace = parser.parse_args(cli_args)
 
     # noinspection PyTypeChecker
     mode: "types.FileParsingMode" = utils.get_truthy_attribute(
