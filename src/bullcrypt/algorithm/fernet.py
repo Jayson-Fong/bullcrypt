@@ -2,7 +2,6 @@
 Wrapper around `cryptography` to decrypt Fernet ciphertexts.
 """
 
-
 import argparse
 import functools
 from typing import Optional, Dict, Tuple, TYPE_CHECKING, Callable, Generator, List

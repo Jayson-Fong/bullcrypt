@@ -2,7 +2,6 @@
 Processes command-line inputs to trigger decryption.
 """
 
-
 import argparse
 from typing import Tuple, Type, TYPE_CHECKING, Sequence, Optional
 

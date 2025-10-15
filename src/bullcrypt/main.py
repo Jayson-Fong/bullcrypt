@@ -1,3 +1,7 @@
+"""
+Executes the program.
+"""
+
 import logging
 import pathlib
 from typing import TYPE_CHECKING, Type, Tuple, Callable, Generator, Optional, Sequence
@@ -59,6 +63,13 @@ def _default_result_handler(
 
 
 def main(args: Optional[Sequence[str]] = None) -> None:
+    """
+    Acquires arguments from the command line and runs the program.
+
+    :param args: Arguments to parse.
+    :return: None.
+    """
+
     handler, files, options = cli.parse(args)
 
     for file in files:

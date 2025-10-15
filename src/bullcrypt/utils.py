@@ -1,3 +1,7 @@
+"""
+General utilities
+"""
+
 import base64
 import logging
 import pathlib
@@ -29,6 +33,12 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 def get_algorithms() -> "EntryPoints":
+    """
+    Identifies algorithm implementations.
+
+    :return: `EntryPoints` for algorithms.
+    """
+
     return entry_points(group="bullcrypt.algorithm")
 
 
@@ -37,6 +47,14 @@ U = TypeVar("U", bound=str)
 
 
 def get_truthy_attribute(obj: Any, options: Sequence[T], fallback: U) -> Union[T, U]:
+    """
+    Iterates over an object provided a list of keys and find the first truthy key.
+
+    :param obj: The object to retrieve values from.
+    :param options: Attributes to retrieve from `obj`.
+    :param fallback: Fallback value if all options fail.
+    :return: The first truthy attribute or fallback value.
+    """
     for option in options:
         if getattr(obj, option, False):
             return option
@@ -58,6 +76,15 @@ def decode_content(
     plaintext_encoding: Optional["types.PlaintextEncoding"],
     encoding: str,
 ) -> bytes:
+    """
+    Decodes a plain text content based on a specified encoding.
+
+    :param content: Content to decode into bytes.
+    :param plaintext_encoding: Encoding to decode using.
+    :param encoding: Encoding to use when converting from a string to bytes plainly.
+    :return: Bytes from decoding `content`.
+    """
+
     if plaintext_encoding is None or plaintext_encoding == "plain":
         return content.encode(encoding)
 
@@ -70,6 +97,21 @@ def extract_content(
     plaintext_encoding: Optional["types.PlaintextEncoding"],
     encoding: str,
 ) -> Generator[bytes, None, None]:
+    """
+    Extracts content from a file path.
+
+    Modes:
+    - raw: Reads the file as raw and returns the content.
+    - chunked: Joins the file's lines, reconstructing it, and decode as needed.
+    - line: Processes each line as a separate ciphertext. Otherwise, identical to "chunked".
+
+    :param file_path: Path to file for parsing.
+    :param mode: Mode to extract using (raw, chunked, or line).
+    :param plaintext_encoding: Encoding to decode non-plaintext strings using.
+    :param encoding: Encoding to use for direct encoding from string to bytes.
+    :return: Generator of decoded bytes.
+    """
+
     if mode == "raw":
         with open(file_path, "rb") as file:
             yield file.read()

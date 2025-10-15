@@ -50,6 +50,7 @@ def test_fernet_raw_multikey(tmp_path: pathlib.Path):
         bullcrypt.main.main(
             [
                 "--raw",
+                "--fernet.key=57ndyQKDwbYrkLKXkT0zPBaIpyfSNktkaWk7HOz_WC8=",
                 "--fernet.key=b_aUzNmDOHKF2A7rO7wVZzMF3_CDTui7obSLtthYmUk=",
                 "--fernet.key=eBUADWmyqd8diJhRb2Kps6ZMbDqzLOXj2_6ILmFs-sE=",
                 "fernet",
