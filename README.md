@@ -1,6 +1,17 @@
 <!--suppress HtmlDeprecatedAttribute-->
 <div align="center">
    <h1>🎯 BullCrypt</h1>
+
+[![Build Status](https://github.com/Jayson-Fong/bullcrypt/actions/workflows/test-package.yml/badge.svg?branch=main)](https://github.com/Jayson-Fong/bullcrypt/actions/workflows/test-package.yml)
+[![Coverage](https://img.shields.io/badge/coverage-98%25-green)](https://github.com/Jayson-Fong/bullcrypt/actions/workflows/test-package.yml)
+[![Latest Version](https://img.shields.io/pypi/v/bullcrypt.svg)](https://pypi.org/project/bullcrypt/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/bullcrypt.svg)](https://pypi.org/project/bullcrypt/)
+[![Format](https://img.shields.io/pypi/format/bullcrypt.svg)](https://pypi.org/project/bullcrypt/)
+[![License](https://img.shields.io/pypi/l/bullcrypt)](https://github.com/Jayson-Fong/bullcrypt/blob/main/README.md)
+[![Status](https://img.shields.io/pypi/status/bullcrypt)](https://pypi.org/project/bullcrypt/)
+[![Types](https://img.shields.io/pypi/types/bullcrypt)](https://pypi.org/project/bullcrypt/)
+
+
 </div>
 
 <hr />
