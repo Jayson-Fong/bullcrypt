@@ -270,15 +270,17 @@ def test_key_not_exist():
     with pytest.raises(ValueError) as e:
         fernet.Fernet.extract_args("fernet", args)
 
-    assert e.value.args[0] == "A Fernet key is required and must be 32 url-safe base64-encoded bytes."
+    assert (
+        e.value.args[0]
+        == "A Fernet key is required and must be 32 url-safe base64-encoded bytes."
+    )
 
 
 def test_invalid_args():
     with pytest.raises(ValueError) as e:
-        for _ in fernet.Fernet.decrypt(b"", types.Options(
-            mode="line",
-            plaintext_encoding="plain"
-        ))():
+        for _ in fernet.Fernet.decrypt(
+            b"", types.Options(mode="line", plaintext_encoding="plain")
+        )():
             pass
 
     assert e.value.args[0] == "Algorithm options expected to be a dict"

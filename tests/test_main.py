@@ -1,9 +1,7 @@
-import io
-import pathlib
 from unittest import mock
 
-import bullcrypt.main
 import bullcrypt.__main__
+import bullcrypt.main
 
 
 def test_main() -> None:
