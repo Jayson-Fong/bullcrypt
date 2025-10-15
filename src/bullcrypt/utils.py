@@ -116,23 +116,36 @@ def extract_content(
         with open(file_path, "rb") as file:
             yield file.read()
     elif mode == "chunked":
-        with open(file_path, "r", encoding=encoding) as file:
-            yield decode_content(
-                "".join(file.read().splitlines()),
-                plaintext_encoding,
-                encoding,
-            )
+        # noinspection PyBroadException
+        # pylint: disable=broad-exception-caught
+        try:
+            with open(file_path, "r", encoding=encoding) as file:
+                yield decode_content(
+                    "".join(file.read().splitlines()),
+                    plaintext_encoding,
+                    encoding,
+                )
+        except Exception:
+            logger.exception("Failed to decode file: %s", file_path)
     elif mode == "line":
-        with open(file_path, "r", encoding=encoding) as file:
-            for line in file:
-                line = line.strip()
-                if line:
-                    # noinspection PyBroadException
-                    # pylint: disable=broad-exception-caught
-                    try:
-                        yield decode_content(line, plaintext_encoding, encoding)
-                    except Exception:
-                        logger.exception("Failed to decode line: %s", line)
+        # noinspection PyBroadException
+        # pylint: disable=broad-exception-caught
+        try:
+            with open(file_path, "r", encoding=encoding) as file:
+                for line in file:
+                    line = line.strip()
+
+                    if line:
+                        # noinspection PyBroadException
+                        # pylint: disable=broad-exception-caught
+                        try:
+                            yield decode_content(line, plaintext_encoding, encoding)
+                        except Exception:
+                            logger.exception("Failed to decode line: %s", line)
+        except Exception:
+            logger.exception("Failed to decode file: %s", file_path)
+    else:
+        raise ValueError(f"Unknown mode {mode}")
 
 
 __all__: Tuple[str, ...] = ("get_algorithms", "get_truthy_attribute")

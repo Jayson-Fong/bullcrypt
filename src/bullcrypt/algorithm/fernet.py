@@ -51,7 +51,7 @@ class Fernet(Algorithm):
     def extract_args(
         cls, algorithm_name: str, args: argparse.Namespace
     ) -> Optional[Dict]:
-        key: Optional[List[str]] = getattr(args, f"{algorithm_name}.key")
+        key: Optional[List[str]] = getattr(args, f"{algorithm_name}.key", None)
         if not key:
             raise ValueError(
                 "A Fernet key is required and must be 32 url-safe base64-encoded bytes."
